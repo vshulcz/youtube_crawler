@@ -1,6 +1,7 @@
 .DS_Store
 bs.html
 bs.json
+youtube.db
 
 __pycache__/
 venv/

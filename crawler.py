@@ -2,7 +2,6 @@ import requests
 import logging
 import re
 import json
-import time
 
 from fake_useragent import UserAgent
 from progress.bar import Bar
