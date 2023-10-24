@@ -1,0 +1,6 @@
+.DS_Store
+bs.html
+bs.json
+
+__pycache__/
+venv/
