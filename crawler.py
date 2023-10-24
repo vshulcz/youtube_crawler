@@ -4,7 +4,7 @@ import re
 import json
 
 from progress.bar import Bar
-from extractors import VideoExtractor, ChannelExtractor, CommentExtractor
+from extractors import VideoExtractor, ChannelExtractor, parse_comment
 from db import Database
 from math import ceil
 
@@ -316,12 +316,11 @@ class YouTubeCrawler:
         )
 
         for i in range(cnt - 1):
-            comment_extractor = CommentExtractor(
+            comment_data = parse_comment(
                 response["onResponseReceivedEndpoints"][-1][
                     "reloadContinuationItemsCommand"
                 ]["continuationItems"][i]
             )
-            comment_data = comment_extractor.comment_extract()
             user_id = db.add_user(comment_data["user_name"], comment_data["user_link"])
             db.add_comment(
                 comment_data["comment_text"],
@@ -371,12 +370,6 @@ class YouTubeCrawler:
                 ]["continuationItems"]
             )
             for i in range(cnt - 1):
-                comment_extractor = CommentExtractor(
-                    response["onResponseReceivedEndpoints"][-1][
-                        "appendContinuationItemsAction"
-                    ]["continuationItems"][i]
-                )
-
                 chcktxt = str(
                     response["onResponseReceivedEndpoints"][-1][
                         "appendContinuationItemsAction"
@@ -389,7 +382,11 @@ class YouTubeCrawler:
                     ).group()
                     continuation = re.search("(?<='token': ')[^']+", chcktxt).group()
 
-                comment_data = comment_extractor.comment_extract()
+                comment_data = parse_comment(
+                    response["onResponseReceivedEndpoints"][-1][
+                        "appendContinuationItemsAction"
+                    ]["continuationItems"][i]
+                )
                 user_id = db.add_user(
                     comment_data["user_name"], comment_data["user_link"]
                 )

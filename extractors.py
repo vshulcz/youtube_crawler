@@ -111,61 +111,25 @@ class ChannelExtractor:
         return channel
 
 
-class CommentExtractor:
-    """Class for extracting data from a comment"""
+def parse_comment(data: dict) -> dict:
+    try:
+        comment = data["commentThreadRenderer"]["comment"]["commentRenderer"]
+    except AttributeError:
+        comment = data["commentRenderer"]
 
-    def __init__(self, element: dict):
-        self.element = element
+    user_name = comment["authorText"]["simpleText"]
+    user_link = comment["authorEndpoint"]["browseEndpoint"]["browseId"]
+    comment_text = comment["contentText"]["runs"][0]["text"]
+    comment_date = comment["publishedTimeText"]["runs"][0]["text"]
+    try:
+        comment_likes = comment["voteCount"]["simpleText"]
+    except AttributeError:
+        comment_likes = 0
 
-    def new_comment(self) -> dict:
-        return {
-            "user_name": None,
-            "user_link": None,
-            "comment_text": None,
-            "comment_date": None,
-            "comment_likes": None,
-        }
-
-    def comment_extract(self) -> dict:
-        comment = self.new_comment()
-
-        try:
-            comment["user_name"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["authorText"]["simpleText"]
-            comment["user_link"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["authorEndpoint"]["browseEndpoint"]["browseId"]
-            comment["comment_text"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["contentText"]["runs"][0]["text"]
-            comment["comment_date"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["publishedTimeText"]["runs"][0]["text"]
-            try:
-                comment["comment_likes"] = self.element["commentThreadRenderer"][
-                    "comment"
-                ]["commentRenderer"]["voteCount"]["simpleText"]
-            except:
-                comment["comment_likes"] = 0
-        except:
-            comment["user_name"] = self.element["commentRenderer"]["authorText"][
-                "simpleText"
-            ]
-            comment["user_link"] = self.element["commentRenderer"]["authorEndpoint"][
-                "browseEndpoint"
-            ]["browseId"]
-            comment["comment_text"] = self.element["commentRenderer"]["contentText"][
-                "runs"
-            ][0]["text"]
-            comment["comment_date"] = self.element["commentRenderer"][
-                "publishedTimeText"
-            ]["runs"][0]["text"]
-            try:
-                comment["comment_likes"] = self.element["commentRenderer"]["voteCount"][
-                    "simpleText"
-                ]
-            except:
-                comment["comment_likes"] = 0
-
-        return comment
+    return {
+        "user_name": user_name,
+        "user_link": user_link,
+        "comment_text": comment_text,
+        "comment_date": comment_date,
+        "comment_likes": comment_likes,
+    }
