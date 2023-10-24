@@ -101,7 +101,7 @@ class YouTubeCrawler:
             ]
 
         # Collecting videos data and their comments
-        for i in range(6, video_amount):
+        for i in range(video_amount):
             response = self.load_video_info(video_links[i])
             video_extractor = VideoExtractor(response)
             video_data = video_extractor.video_extract(
