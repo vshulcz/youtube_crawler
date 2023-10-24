@@ -1,0 +1,14 @@
+{
+    "error": {
+        "code": 503,
+        "message": "The service is currently unavailable.",
+        "errors": [
+            {
+                "message": "The service is currently unavailable.",
+                "domain": "global",
+                "reason": "backendError"
+            }
+        ],
+        "status": "UNAVAILABLE"
+    }
+}
