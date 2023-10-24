@@ -1,5 +1,7 @@
 import sqlite3
 
+from date_converter import parse_time_ago
+
 
 class Database:
     """"""
@@ -134,7 +136,7 @@ class Database:
             """
             INSERT INTO comments (comment_text, comment_date, comment_likes, user_id, video_id) VALUES(?, ?, ?, ?, ?);
             """,
-            (text, date, likes, user_id, video_id),
+            (text, parse_time_ago(date), likes, user_id, video_id),
         )
         self.conn.commit()
 

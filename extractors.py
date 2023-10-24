@@ -130,42 +130,20 @@ class CommentExtractor:
         comment = self.new_comment()
 
         try:
-            comment["user_name"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["authorText"]["simpleText"]
-            comment["user_link"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["authorEndpoint"]["browseEndpoint"]["browseId"]
-            comment["comment_text"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["contentText"]["runs"][0]["text"]
-            comment["comment_date"] = self.element["commentThreadRenderer"]["comment"][
-                "commentRenderer"
-            ]["publishedTimeText"]["runs"][0]["text"]
-            try:
-                comment["comment_likes"] = self.element["commentThreadRenderer"][
-                    "comment"
-                ]["commentRenderer"]["voteCount"]["simpleText"]
-            except:
-                comment["comment_likes"] = 0
+            comment["user_name"] = self.element["authorText"]["simpleText"]
         except:
-            comment["user_name"] = self.element["commentRenderer"]["authorText"][
-                "simpleText"
-            ]
-            comment["user_link"] = self.element["commentRenderer"]["authorEndpoint"][
-                "browseEndpoint"
-            ]["browseId"]
-            comment["comment_text"] = self.element["commentRenderer"]["contentText"][
-                "runs"
-            ][0]["text"]
-            comment["comment_date"] = self.element["commentRenderer"][
-                "publishedTimeText"
-            ]["runs"][0]["text"]
-            try:
-                comment["comment_likes"] = self.element["commentRenderer"]["voteCount"][
-                    "simpleText"
-                ]
-            except:
-                comment["comment_likes"] = 0
+            comment["user_name"] = ""
+        comment["user_link"] = self.element["authorEndpoint"]["browseEndpoint"][
+            "browseId"
+        ]
+        try:
+            comment["comment_text"] = self.element["contentText"]["runs"][0]["text"]
+        except:
+            comment["comment_text"] = ""
+        comment["comment_date"] = self.element["publishedTimeText"]["runs"][0]["text"]
+        try:
+            comment["comment_likes"] = self.element["voteCount"]["simpleText"]
+        except:
+            comment["comment_likes"] = 0
 
         return comment
