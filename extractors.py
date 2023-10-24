@@ -1,6 +1,3 @@
-import json
-
-
 class VideoExtractor:
     """Сlass for extracting data from a video"""
 
@@ -65,19 +62,6 @@ class VideoExtractor:
             "simpleText"
         ]
         video["video_duration"] = duration
-        video["video_preview"] = self.element["contents"]["twoColumnWatchNextResults"][
-            "results"
-        ]["results"]["contents"][1]["videoSecondaryInfoRenderer"]["owner"][
-            "videoOwnerRenderer"
-        ][
-            "thumbnail"
-        ][
-            "thumbnails"
-        ][
-            2
-        ][
-            "url"
-        ]
 
         return video
 
@@ -121,6 +105,7 @@ class CommentExtractor:
         return {
             "user_name": None,
             "user_link": None,
+            "user_avatar": None,
             "comment_text": None,
             "comment_date": None,
             "comment_likes": None,
@@ -145,5 +130,9 @@ class CommentExtractor:
             comment["comment_likes"] = self.element["voteCount"]["simpleText"]
         except:
             comment["comment_likes"] = 0
+        try:
+            comment["user_avatar"] = self.element["authorThumbnail"][2]["url"]
+        except:
+            comment["user_avatar"] = ""
 
         return comment

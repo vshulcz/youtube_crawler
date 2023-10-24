@@ -69,27 +69,47 @@ class YouTubeCrawler:
             channel_data["channel_amount_followers"],
             channel_data["channel_link"],
         )
+        db.add_channel_files(
+            "image",
+            channel_data["channel_avatar"],
+            channel_id,
+        )
 
         videos = self.find_keys(data[1], "videoRenderer")
-        videos_ld = [
-            [video["videoId"], video["lengthText"]["simpleText"]] for video in videos
+        videos_ldv = [
+            [
+                video["videoId"],
+                video["lengthText"]["simpleText"],
+                video["thumbnail"]["thumbnails"][3]["url"],
+            ]
+            for video in videos
         ]
 
         for _ in range(ceil(video_amount / 30) - 1):
             self.video_pagination(data)
 
             videos = self.find_keys(data[1], "videoRenderer")
-            videos_ld += [
-                [video["videoId"], video["lengthText"]["simpleText"]]
+            videos_ldv += [
+                [
+                    video["videoId"],
+                    video["lengthText"]["simpleText"],
+                    video["thumbnail"]["thumbnails"][3]["url"],
+                ]
                 for video in videos
             ]
 
         # Collecting videos data and their comments
-        for link, duration in videos_ld:
-            self.load_video(data, link)
+        for link, duration, preview in videos_ldv:
+            self.load_video(
+                data,
+                link,
+            )
 
             video_extractor = VideoExtractor(data[1])
-            video_data = video_extractor.video_extract(link, duration)
+            video_data = video_extractor.video_extract(
+                link,
+                duration,
+            )
             video_id = db.add_video(
                 video_data["video_name"],
                 video_data["video_link"],
@@ -98,6 +118,11 @@ class YouTubeCrawler:
                 video_data["video_date"],
                 video_data["video_duration"],
                 channel_id,
+            )
+            db.add_video_files(
+                "image",
+                preview,
+                video_id,
             )
 
             self.comment_pagination(
@@ -142,10 +167,9 @@ class YouTubeCrawler:
             ).json()
 
             data[1] = response
-
             [
-                tokens.insert(0, ep)
-                for ep in self.find_keys(data[1], "continuationEndpoint")
+                tokens.insert(0, tkn)
+                for tkn in self.find_keys(data[1], "continuationEndpoint")
             ]
 
             comments = self.find_keys(data[1], "commentRenderer")
@@ -165,9 +189,14 @@ class YouTubeCrawler:
                     user_id,
                     video_id,
                 )
+                if comment_data["user_avatar"] != "":
+                    db.add_user_files(
+                        "image",
+                        comment_data["user_avatar"],
+                        user_id,
+                    )
 
                 bar.next()
-
             comment_cnt += len(comments)
 
     def video_pagination(

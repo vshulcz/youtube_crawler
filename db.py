@@ -50,21 +50,21 @@ class Database:
                 file_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 file_type VARCHAR,
                 file_path VARCHAR,
-                user_id VARCHAR REFERENCES users(id)
+                user_id VARCHAR REFERENCES users(user_id)
             );
 
             CREATE TABLE IF NOT EXISTS video_files (
                 file_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 file_type VARCHAR,
                 file_path VARCHAR,
-                video_id VARCHAR REFERENCES videos(id)
+                video_id VARCHAR REFERENCES videos(video_id)
             );
 
             CREATE TABLE IF NOT EXISTS channel_files (
                 file_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 file_type VARCHAR,
                 file_path VARCHAR,
-                channel_id VARCHAR REFERENCES channels(id)
+                channel_id VARCHAR REFERENCES channels(channel_id)
             );
             """
         )
@@ -166,43 +166,61 @@ class Database:
 
     def add_user_files(
         self,
-        id: int,
         type: str,
         path: str,
         user_id: int,
     ):
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "INSERT INTO channel VALUES(?, ?, ?)",
-            (id, type, path, user_id),
+        self.cursor.execute(
+            """
+            INSERT INTO user_files (file_type, file_path, user_id)
+            SELECT ?, ?, ?
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM user_files
+                WHERE user_id = ?
+            )
+            """,
+            (type, path, user_id, user_id),
         )
         self.conn.commit()
 
     def add_video_files(
         self,
-        id: int,
         type: str,
         path: str,
         video_id: int,
     ):
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "INSERT INTO channel VALUES(?, ?, ?)",
-            (id, type, path, video_id),
+        self.cursor.execute(
+            """
+            INSERT INTO video_files (file_type, file_path, video_id)
+            SELECT ?, ?, ?
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM video_files
+                WHERE video_id = ?
+            )
+            """,
+            (type, path, video_id, video_id),
         )
         self.conn.commit()
 
     def add_channel_files(
         self,
-        id: int,
         type: str,
         path: str,
         channel_id: int,
     ):
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "INSERT INTO channel VALUES(?, ?, ?)",
-            (id, type, path, channel_id),
+        self.cursor.execute(
+            """
+            INSERT INTO channel_files (file_type, file_path, channel_id)
+            SELECT ?, ?, ?
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM channel_files
+                WHERE channel_id = ?
+            )
+            """,
+            (type, path, channel_id, channel_id),
         )
         self.conn.commit()
 
