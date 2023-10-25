@@ -118,9 +118,12 @@ class CommentExtractor:
             comment["user_name"] = self.element["authorText"]["simpleText"]
         except:
             comment["user_name"] = ""
-        comment["user_link"] = self.element["authorEndpoint"]["browseEndpoint"][
-            "browseId"
-        ]
+        try:
+            comment["user_link"] = self.element["authorEndpoint"]["browseEndpoint"][
+                "browseId"
+            ]
+        except:
+            comment["user_link"] = ""
         try:
             comment["comment_text"] = self.element["contentText"]["runs"][0]["text"]
         except:
