@@ -7,6 +7,7 @@ from fake_useragent import UserAgent
 from progress.bar import Bar
 from extractors import VideoExtractor, ChannelExtractor, CommentExtractor
 from db import Database
+from find_keys import find_keys
 from math import ceil
 
 logger = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ class YouTubeCrawler:
             channel_id,
         )
 
-        videos = self.find_keys(data[1], "videoRenderer")
+        videos = find_keys(data[1], "videoRenderer")
         videos_ldv = [
             [
                 video["videoId"],
@@ -88,7 +89,7 @@ class YouTubeCrawler:
         for _ in range(ceil(video_amount / 30) - 1):
             self.video_pagination(data)
 
-            videos = self.find_keys(data[1], "videoRenderer")
+            videos = find_keys(data[1], "videoRenderer")
             videos_ldv += [
                 [
                     video["videoId"],
@@ -100,6 +101,8 @@ class YouTubeCrawler:
 
         # Collecting videos data and their comments
         for link, duration, preview in videos_ldv:
+            for _ in range(42):
+                continue
             self.load_video(
                 data,
                 link,
@@ -146,7 +149,7 @@ class YouTubeCrawler:
     ) -> None:
         """Function for pagination of comments on videos."""
         comment_cnt = 0
-        tokens = [self.find_keys(data[1], "subMenuItems")[0][0]["serviceEndpoint"]]
+        tokens = [find_keys(data[1], "subMenuItems")[0][0]["serviceEndpoint"]]
 
         while comment_amount > comment_cnt and tokens:
             token = tokens.pop()
@@ -169,10 +172,10 @@ class YouTubeCrawler:
             data[1] = response
             [
                 tokens.insert(0, tkn)
-                for tkn in self.find_keys(data[1], "continuationEndpoint")
+                for tkn in find_keys(data[1], "continuationEndpoint")
             ]
 
-            comments = self.find_keys(data[1], "commentRenderer")
+            comments = find_keys(data[1], "commentRenderer")
 
             for comment in comments:
                 comment_extractor = CommentExtractor(comment)
@@ -209,7 +212,7 @@ class YouTubeCrawler:
         }
         json_data = {
             "context": data[0]["INNERTUBE_CONTEXT"],
-            "continuation": self.find_keys(data[1], "continuationEndpoint")[0][
+            "continuation": find_keys(data[1], "continuationEndpoint")[0][
                 "continuationCommand"
             ]["token"],
         }
@@ -234,24 +237,3 @@ class YouTubeCrawler:
                 response,
             ).group()
         )
-
-    def find_keys(
-        self,
-        json_data: json,
-        target_key: str,
-    ) -> list:
-        """Function for finding keys in json"""
-        results = []
-
-        def find_key(data):
-            if isinstance(data, dict):
-                for key, value in data.items():
-                    if key == target_key:
-                        results.append(value)
-                    find_key(value)
-            elif isinstance(data, list):
-                for item in data:
-                    find_key(item)
-
-        find_key(json_data)
-        return results
