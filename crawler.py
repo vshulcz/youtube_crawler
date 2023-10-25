@@ -99,7 +99,7 @@ class YouTubeCrawler:
             ]
 
         # Collecting videos data and their comments
-        for link, duration, preview in videos_ldv
+        for link, duration, preview in videos_ldv:
             self.load_video(
                 data,
                 link,
