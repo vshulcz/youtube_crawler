@@ -36,13 +36,13 @@ For "Min messages," retrieve all users with a message count exceeding the specif
 
 ## Installation
 1. Ensure you have the tkinter installed. On mac os, you should run in the terminal:
-```sh
-brew install python-tk
-```
+ ```sh
+ brew install python-tk
+ ```
 2. Clone this repository to your local machine with:
-```sh
-git clone 
-```
+ ```sh
+ git clone 
+ ```
 3. Navigate to the Repository Directory:
  ```sh
  cd YouTubeCrawler
@@ -51,8 +51,8 @@ git clone
  ```sh
  python -m venv venv
  ```
-   Activate the virtual environment:
-   On macOS and Linux:
+   Activate the virtual environment: \n
+   **On macOS and Linux:**
  ```sh
  source venv/bin/activate
  ```
