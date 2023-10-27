@@ -1,5 +1,7 @@
-from crawler import YouTubeCrawler
+if __name__ == "__main__":
+    import tkinter as tk
+    from gui.app import MyApplication
 
-crawler = YouTubeCrawler("@MrBeast")
-
-crawler.load_channel(video_amount=200, comment_amount=5000)
+    root = tk.Tk()
+    app = MyApplication(root)
+    root.mainloop()

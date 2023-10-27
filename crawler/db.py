@@ -1,10 +1,10 @@
 import sqlite3
 
-from date_converter import parse_time_ago
+from crawler.date_converter import parse_time_ago
 
 
 class Database:
-    """"""
+    """SQL database for youtube channels"""
 
     def __init__(self, path: str):
         self.conn = sqlite3.connect(path)

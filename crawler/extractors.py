@@ -1,3 +1,6 @@
+from crawler.find_keys import find_keys
+
+
 class VideoExtractor:
     """Сlass for extracting data from a video"""
 
@@ -18,34 +21,16 @@ class VideoExtractor:
     def video_extract(self, link: str, duration: str) -> dict:
         video = self.new_video()
 
-        video["video_name"] = self.element["contents"]["twoColumnWatchNextResults"][
-            "results"
-        ]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["title"]["runs"][0][
-            "text"
-        ]
+        videoPrimaryInfoRenderer = find_keys(self.element, "videoPrimaryInfoRenderer")
+
+        video["video_name"] = videoPrimaryInfoRenderer[0]["title"]["runs"][0]["text"]
         video["video_link"] = f"https://www.youtube.com/watch?v={link}"
-        video["video_views"] = self.element["contents"]["twoColumnWatchNextResults"][
-            "results"
-        ]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["viewCount"][
+        video["video_views"] = videoPrimaryInfoRenderer[0]["viewCount"][
             "videoViewCountRenderer"
-        ][
-            "viewCount"
-        ][
-            "simpleText"
-        ]
-        video["video_likes"] = self.element["contents"]["twoColumnWatchNextResults"][
-            "results"
-        ]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["videoActions"][
+        ]["viewCount"]["simpleText"]
+        video["video_likes"] = videoPrimaryInfoRenderer[0]["videoActions"][
             "menuRenderer"
-        ][
-            "topLevelButtons"
-        ][
-            0
-        ][
-            "segmentedLikeDislikeButtonRenderer"
-        ][
-            "likeButton"
-        ][
+        ]["topLevelButtons"][0]["segmentedLikeDislikeButtonRenderer"]["likeButton"][
             "toggleButtonRenderer"
         ][
             "defaultText"
@@ -56,11 +41,7 @@ class VideoExtractor:
         ][
             "label"
         ]
-        video["video_date"] = self.element["contents"]["twoColumnWatchNextResults"][
-            "results"
-        ]["results"]["contents"][0]["videoPrimaryInfoRenderer"]["dateText"][
-            "simpleText"
-        ]
+        video["video_date"] = videoPrimaryInfoRenderer[0]["dateText"]["simpleText"]
         video["video_duration"] = duration
 
         return video
@@ -125,7 +106,9 @@ class CommentExtractor:
         except:
             comment["user_link"] = ""
         try:
-            comment["comment_text"] = self.element["contentText"]["runs"][0]["text"]
+            comment["comment_text"] = "".join(
+                txt["text"] for txt in self.element["contentText"]["runs"]
+            )
         except:
             comment["comment_text"] = ""
         comment["comment_date"] = self.element["publishedTimeText"]["runs"][0]["text"]

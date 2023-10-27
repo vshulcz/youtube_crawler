@@ -3,12 +3,11 @@ import logging
 import re
 import json
 
-from fake_useragent import UserAgent
-from progress.bar import Bar
-from extractors import VideoExtractor, ChannelExtractor, CommentExtractor
-from db import Database
-from find_keys import find_keys
+from typing import Callable
 from math import ceil
+from crawler.extractors import VideoExtractor, ChannelExtractor, CommentExtractor
+from crawler.db import Database
+from crawler.find_keys import find_keys
 
 logger = logging.getLogger(__name__)
 
@@ -22,11 +21,14 @@ class YouTubeCrawler:
 
     def __init__(self, name: str):
         self.session = requests.session()
-        self.session.headers["User-Agent"] = UserAgent().random
+        self.session.headers[
+            "User-Agent"
+        ] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.2296 YaBrowser/23.9.0.2296 Yowser/2.5 Safari/537.36"
         self.name = name
 
     def load_channel(
         self,
+        progress_callback: Callable[[int], None],
         video_amount: int = 10,
         comment_amount: int = 1000,
         path: str = "youtube.db",
@@ -38,9 +40,6 @@ class YouTubeCrawler:
         """
         db = Database(path)
         db.initialize()
-        bar = Bar(
-            "Parsing", max=video_amount * comment_amount, suffix="%(percent).2f%%"
-        )
 
         response = self.session.get(f"https://www.youtube.com/{self.name}/videos").text
 
@@ -99,17 +98,20 @@ class YouTubeCrawler:
                 for video in videos
             ]
 
+        progress = 0
+        precent = 100 / video_amount
+
         # Collecting videos data and their comments
-        for link, duration, preview in videos_ldv:
+        for i in range(video_amount):
             self.load_video(
                 data,
-                link,
+                videos_ldv[i][0],
             )
 
             video_extractor = VideoExtractor(data[1])
             video_data = video_extractor.video_extract(
-                link,
-                duration,
+                videos_ldv[i][0],
+                videos_ldv[i][1],
             )
             video_id = db.add_video(
                 video_data["video_name"],
@@ -122,7 +124,7 @@ class YouTubeCrawler:
             )
             db.add_video_files(
                 "image",
-                preview,
+                videos_ldv[i][2],
                 video_id,
             )
 
@@ -131,10 +133,10 @@ class YouTubeCrawler:
                 comment_amount,
                 db,
                 video_id,
-                bar,
             )
-
-        bar.finish()
+            progress += precent
+            progress_callback(progress)
+        progress_callback(100)
         db.conn_close()
 
     def comment_pagination(
@@ -143,7 +145,6 @@ class YouTubeCrawler:
         comment_amount: int,
         db: Database,
         video_id: str,
-        bar: Bar,
     ) -> None:
         """Function for pagination of comments on videos."""
         comment_cnt = 0
@@ -196,8 +197,6 @@ class YouTubeCrawler:
                         comment_data["user_avatar"],
                         user_id,
                     )
-
-                bar.next()
             comment_cnt += len(comments)
 
     def video_pagination(
