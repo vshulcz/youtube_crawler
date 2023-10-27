@@ -36,34 +36,34 @@ For "Min messages," retrieve all users with a message count exceeding the specif
 
 ## Installation
 1. Ensure you have the tkinter installed. On mac os, you should run in the terminal:
- ```sh
- brew install python-tk
- ```
+   ```sh
+   brew install python-tk
+   ```
 2. Clone this repository to your local machine with:
- ```sh
- git clone 
- ```
+   ```sh
+   git clone 
+   ```
 3. Navigate to the Repository Directory:
- ```sh
- cd YouTubeCrawler
- ```
+   ```sh
+   cd YouTubeCrawler
+   ```
 4. Set up a Virtual Environment (Optional but Recommended):
- ```sh
- python -m venv venv
- ```
-   Activate the virtual environment:\
-   **On macOS and Linux:**
- ```sh
- source venv/bin/activate
- ```
+   ```sh
+   python -m venv venv
+   ```
+ - Activate the virtual environment:
+   - **On macOS and Linux:**
+   ```sh
+   source venv/bin/activate
+   ```
 5. Install Required Packages:
- ```sh
- pip install -r requirements.txt
- ```
+   ```sh
+   pip install -r requirements.txt
+   ```
 6. Run the Application:
- ```sh
- python main.py
- ```
+   ```sh
+   python main.py
+   ```
 This will launch the application, and you can start using its features via the GUI. Use the GUI to start crawling YouTube channels, managing your collected data, and executing SQL queries.
 
 ## Contributions
