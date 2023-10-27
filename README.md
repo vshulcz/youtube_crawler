@@ -51,7 +51,7 @@ For "Min messages," retrieve all users with a message count exceeding the specif
  ```sh
  python -m venv venv
  ```
-   Activate the virtual environment: \n
+   Activate the virtual environment:\
    **On macOS and Linux:**
  ```sh
  source venv/bin/activate
