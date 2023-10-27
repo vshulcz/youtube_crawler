@@ -40,7 +40,7 @@ This will launch the application, and you can start using its features via the G
 ## Usage
 ### YouTube Crawler
 Open the "YouTube Crawler" tab in the application.
-In the first input field, enter the channel name (from the YouTube channel URL, using "@").
+In the first input field, enter the channel name (from the YouTube channel URL, using "@", for example: @PewDiePie, @MrBeast).
 In the second input field, specify how many videos you want to parse from the channel.
 In the third input field, set the number of comments to collect for each video.
 Click the "Run Crawling" button and wait for the progress bar to fill up.
