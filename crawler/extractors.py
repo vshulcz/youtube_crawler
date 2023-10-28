@@ -4,10 +4,15 @@ from crawler.find_keys import find_keys
 class VideoExtractor:
     """Сlass for extracting data from a video"""
 
-    def __init__(self, element: dict):
+    def __init__(
+        self,
+        element: dict,
+    ) -> None:
         self.element = element
 
-    def new_video(self) -> dict:
+    def new_video(
+        self,
+    ) -> dict:
         return {
             "video_name": None,
             "video_link": None,
@@ -18,7 +23,11 @@ class VideoExtractor:
             "video_preview": None,
         }
 
-    def video_extract(self, link: str, duration: str) -> dict:
+    def video_extract(
+        self,
+        link: str,
+        duration: str,
+    ) -> dict:
         video = self.new_video()
 
         videoPrimaryInfoRenderer = find_keys(self.element, "videoPrimaryInfoRenderer")
@@ -50,10 +59,15 @@ class VideoExtractor:
 class ChannelExtractor:
     """Class for extracting data from a channel"""
 
-    def __init__(self, element: dict):
+    def __init__(
+        self,
+        element: dict,
+    ) -> None:
         self.element = element
 
-    def new_channel(self) -> dict:
+    def new_channel(
+        self,
+    ) -> dict:
         return {
             "channel_name": None,
             "channel_amount_followers": None,
@@ -61,7 +75,10 @@ class ChannelExtractor:
             "channel_avatar": None,
         }
 
-    def channel_extract(self, name: str) -> dict:
+    def channel_extract(
+        self,
+        name: str,
+    ) -> dict:
         channel = self.new_channel()
 
         channel["channel_name"] = name
@@ -79,10 +96,15 @@ class ChannelExtractor:
 class CommentExtractor:
     """Class for extracting data from a comment"""
 
-    def __init__(self, element: dict):
+    def __init__(
+        self,
+        element: dict,
+    ) -> None:
         self.element = element
 
-    def new_comment(self) -> dict:
+    def new_comment(
+        self,
+    ) -> dict:
         return {
             "user_name": None,
             "user_link": None,
@@ -92,7 +114,9 @@ class CommentExtractor:
             "comment_likes": None,
         }
 
-    def comment_extract(self) -> dict:
+    def comment_extract(
+        self,
+    ) -> dict:
         comment = self.new_comment()
 
         try:

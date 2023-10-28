@@ -6,11 +6,16 @@ from crawler.date_converter import parse_time_ago
 class Database:
     """SQL database for youtube channels"""
 
-    def __init__(self, path: str):
+    def __init__(
+        self,
+        path: str,
+    ) -> None:
         self.conn = sqlite3.connect(path)
         self.cursor = self.conn.cursor()
 
-    def initialize(self):
+    def initialize(
+        self,
+    ) -> None:
         self.cursor.executescript(
             """
             CREATE TABLE IF NOT EXISTS channels (
@@ -75,7 +80,7 @@ class Database:
         name: str,
         amount_followers: str,
         link: str,
-    ):
+    ) -> str:
         self.cursor.execute(
             """
             INSERT INTO channels (channel_name, channel_amount_followers, channel_link)
@@ -104,7 +109,7 @@ class Database:
         date: str,
         duration: str,
         channel_id: int,
-    ):
+    ) -> str:
         self.cursor.execute(
             """
             INSERT INTO videos (video_name, video_link, video_views, video_likes, video_date, video_duration, channel_id)
@@ -131,7 +136,7 @@ class Database:
         likes: str,
         user_id: str,
         video_id: int,
-    ):
+    ) -> None:
         self.cursor.execute(
             """
             INSERT INTO comments (comment_text, comment_date, comment_likes, user_id, video_id) VALUES(?, ?, ?, ?, ?);
@@ -144,7 +149,7 @@ class Database:
         self,
         name: str,
         link: str,
-    ):
+    ) -> str:
         self.cursor.execute(
             """
             INSERT INTO users (user_name, user_link)
@@ -169,7 +174,7 @@ class Database:
         type: str,
         path: str,
         user_id: int,
-    ):
+    ) -> None:
         self.cursor.execute(
             """
             INSERT INTO user_files (file_type, file_path, user_id)
@@ -189,7 +194,7 @@ class Database:
         type: str,
         path: str,
         video_id: int,
-    ):
+    ) -> None:
         self.cursor.execute(
             """
             INSERT INTO video_files (file_type, file_path, video_id)
@@ -209,7 +214,7 @@ class Database:
         type: str,
         path: str,
         channel_id: int,
-    ):
+    ) -> None:
         self.cursor.execute(
             """
             INSERT INTO channel_files (file_type, file_path, channel_id)
@@ -224,5 +229,7 @@ class Database:
         )
         self.conn.commit()
 
-    def conn_close(self):
+    def conn_close(
+        self,
+    ) -> None:
         self.conn.close()

@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 
 
-def parse_time_ago(time_ago):
+def parse_time_ago(
+    time_ago: str,
+) -> str:
     words = time_ago.split()
 
     value = int(words[0])

@@ -19,7 +19,7 @@ class YouTubeCrawler:
     For example: YouTubeCrawler("@MrBeast")
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.session = requests.session()
         self.session.headers[
             "User-Agent"
@@ -32,7 +32,7 @@ class YouTubeCrawler:
         video_amount: int = 10,
         comment_amount: int = 1000,
         path: str = "youtube.db",
-    ):
+    ) -> None:
         """
         Function for collecting data about the channel and its videos.
         It should transmit the number of videos that need to be parsed and the number of

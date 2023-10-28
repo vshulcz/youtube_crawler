@@ -8,12 +8,12 @@ class DataBaseSearch:
     def __init__(
         self,
         tab_control: ttk.Notebook,
-    ):
+    ) -> None:
         self.db_tab = self.add_tab(tab_control=tab_control)
 
     def tab_render(
         self,
-    ):
+    ) -> None:
         search_label = ttk.Label(self.db_tab, text="Search by:")
         search_label.grid(row=0, column=0, pady=5)
 
@@ -47,7 +47,12 @@ class DataBaseSearch:
         )
         search_button.grid(row=2, columnspan=3, pady=5)
 
-    def perform_search(self, search_option, search_text, result_text):
+    def perform_search(
+        self,
+        search_option: str,
+        search_text: str,
+        result_text: scrolledtext.ScrolledText,
+    ) -> None:
         connection = sqlite3.connect("youtube.db")
         cursor = connection.cursor()
 
@@ -85,7 +90,7 @@ class DataBaseSearch:
     def add_tab(
         self,
         tab_control: ttk.Notebook,
-    ):
+    ) -> None:
         db_tab = ttk.Frame(tab_control)
         tab_control.add(
             db_tab,
@@ -98,7 +103,7 @@ class DataBaseSearch:
     def on_entry_leave(
         self,
         event,
-    ):
+    ) -> None:
         if self.entry.get() == "":
             self.entry.insert(0, "Enter text needs to be searched")
             self.entry.config(fg="gray")
@@ -106,7 +111,7 @@ class DataBaseSearch:
     def on_entry_click(
         self,
         event,
-    ):
+    ) -> None:
         if self.entry.get() == "Enter text needs to be searched":
             self.entry.delete(0, "end")
             self.entry.config(fg="black")

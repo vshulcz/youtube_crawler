@@ -10,17 +10,17 @@ class DataBaseView:
     def __init__(
         self,
         tab_control: ttk.Notebook,
-    ):
+    ) -> None:
         self.db_tab = self.add_tab(tab_control=tab_control)
         self.treeview = None
 
     def tab_render(
         self,
-    ):
+    ) -> None:
         conn = sqlite3.connect("youtube.db")
         cursor = conn.cursor()
 
-        def show_table():
+        def show_table() -> None:
             conn = sqlite3.connect("youtube.db")
             selected_table = table_var.get()
 
@@ -49,7 +49,10 @@ class DataBaseView:
             for row in rows:
                 self.treeview.insert("", "end", values=row)
 
-        def sort_treeview(col, reverse):
+        def sort_treeview(
+            col: str,
+            reverse: bool,
+        ) -> None:
             data = [
                 (self.treeview.set(child, col), child)
                 for child in self.treeview.get_children("")
@@ -77,7 +80,7 @@ class DataBaseView:
     def add_tab(
         self,
         tab_control: ttk.Notebook,
-    ):
+    ) -> None:
         db_tab = ttk.Frame(tab_control)
         tab_control.add(
             db_tab,

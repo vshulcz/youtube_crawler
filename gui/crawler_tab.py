@@ -12,12 +12,12 @@ class CrawlerTab:
     def __init__(
         self,
         tab_control: ttk.Notebook,
-    ):
+    ) -> None:
         self.db_tab = self.add_tab(tab_control=tab_control)
 
     def tab_render(
         self,
-    ):
+    ) -> None:
         channel_label = ttk.Label(self.db_tab, text="Channel name:")
         channel_label.grid(row=0, column=0, padx=10, pady=5)
         num_videos_label = ttk.Label(self.db_tab, text="Number of videos:")
@@ -61,7 +61,7 @@ class CrawlerTab:
         name: str,
         video_amount: int = 10,
         comment_amount: int = 1000,
-    ):
+    ) -> None:
         crawler = YouTubeCrawler(name)
 
         progress_var = tk.DoubleVar()
@@ -78,14 +78,16 @@ class CrawlerTab:
         progress_label = ttk.Label(self.db_tab, text="Crawler process")
         progress_label.grid(row=5, column=0, columnspan=2)
 
-        def update_progress(progress):
+        def update_progress(
+            progress: int,
+        ) -> None:
             progress_var.set(progress)
 
             if progress >= 100.0:
                 progress_bar.grid_forget()
                 progress_label.config(text="Well Done!")
 
-        def start_crawling():
+        def start_crawling() -> None:
             crawler.load_channel(
                 video_amount=video_amount,
                 comment_amount=comment_amount,
@@ -98,7 +100,7 @@ class CrawlerTab:
     def add_tab(
         self,
         tab_control: ttk.Notebook,
-    ):
+    ) -> ttk.Frame:
         db_tab = ttk.Frame(tab_control)
         tab_control.add(
             db_tab,
@@ -111,7 +113,7 @@ class CrawlerTab:
     def on_entry_click(
         self,
         event,
-    ):
+    ) -> None:
         if self.channel_name_entry.get() == "Enter name of channel needs to be crawled":
             self.channel_name_entry.delete(0, "end")
             self.channel_name_entry.config(fg="black")
@@ -119,7 +121,7 @@ class CrawlerTab:
     def on_num_videos_click(
         self,
         event,
-    ):
+    ) -> None:
         if self.num_videos_entry.get() == "Enter number of videos needs to be crawled":
             self.num_videos_entry.delete(0, "end")
             self.num_videos_entry.config(fg="black")
@@ -127,7 +129,7 @@ class CrawlerTab:
     def on_num_comments_click(
         self,
         event,
-    ):
+    ) -> None:
         if (
             self.num_comments_entry.get()
             == "Enter number of comments needs to be crawled from every video"
@@ -138,7 +140,7 @@ class CrawlerTab:
     def on_entry_leave(
         self,
         event,
-    ):
+    ) -> None:
         if self.channel_name_entry.get() == "":
             self.channel_name_entry.insert(
                 0, "Enter name of channel needs to be crawled"
@@ -148,7 +150,7 @@ class CrawlerTab:
     def on_num_videos_leave(
         self,
         event,
-    ):
+    ) -> None:
         if self.num_videos_entry.get() == "":
             self.num_videos_entry.insert(
                 0, "Enter number of videos needs to be crawled"
@@ -158,7 +160,7 @@ class CrawlerTab:
     def on_num_comments_leave(
         self,
         event,
-    ):
+    ) -> None:
         if self.num_comments_entry.get() == "":
             self.num_comments_entry.insert(
                 0, "Enter number of comments needs to be crawled from every video"
