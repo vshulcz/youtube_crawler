@@ -2,7 +2,7 @@
 
 YouTubeCrawler is a fast, efficient, and user-friendly tool for collecting data from YouTube channels. It provides a Graphical User Interface (GUI) built with tkinter and uses its own database to store and manage the gathered data. This project leverages only the requests library, ensuring faster performance than the free YouTube API.
 
-## About
+## Getting Started
 YouTubeCrawler is optimized for speed, allowing you to gather data from YouTube channels quickly with a GUI, that makes it easy to interact with and manage your collected data. The tool utilizes its own database to store and organize data, making it convenient for various data-related tasks. YouTubeCrawler offers various tools to interact with the data you've collected for your specific needs.
 
 ## Installation
@@ -12,7 +12,7 @@ YouTubeCrawler is optimized for speed, allowing you to gather data from YouTube 
    ```
 2. Clone this repository to your local machine with:
    ```sh
-   git clone 
+   git clone https://github.com/Shulcz/youtube_crawler.git
    ```
 3. Navigate to the Repository Directory:
    ```sh
@@ -40,7 +40,7 @@ This will launch the application, and you can start using its features via the G
 ## Usage
 ### YouTube Crawler
 Open the "YouTube Crawler" tab in the application.
-In the first input field, enter the channel name (from the YouTube channel URL, using "@").
+In the first input field, enter the channel name (from the YouTube channel URL, using "@", for example: @PewDiePie, @MrBeast).
 In the second input field, specify how many videos you want to parse from the channel.
 In the third input field, set the number of comments to collect for each video.
 Click the "Run Crawling" button and wait for the progress bar to fill up.
