@@ -1,5 +1,4 @@
 import requests
-import logging
 import re
 import json
 
@@ -8,8 +7,6 @@ from math import ceil
 from crawler.extractors import VideoExtractor, ChannelExtractor, CommentExtractor
 from crawler.db import Database
 from crawler.find_keys import find_keys
-
-logger = logging.getLogger(__name__)
 
 
 class YouTubeCrawler:
