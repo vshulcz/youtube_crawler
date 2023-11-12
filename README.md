@@ -2,9 +2,6 @@
 
 YouTubeCrawler is a fast, efficient, and user-friendly tool for collecting data from YouTube channels. It provides a Graphical User Interface (GUI) built with tkinter and uses its own database to store and manage the gathered data. This project leverages only the requests library, ensuring faster performance than the free YouTube API.
 
-## Getting Started
-YouTubeCrawler is optimized for speed, allowing you to gather data from YouTube channels quickly with a GUI, that makes it easy to interact with and manage your collected data. The tool utilizes its own database to store and organize data, making it convenient for various data-related tasks. YouTubeCrawler offers various tools to interact with the data you've collected for your specific needs.
-
 ## Installation
 1. Ensure you have the tkinter installed. On mac os, you should run in the terminal:
    ```sh
